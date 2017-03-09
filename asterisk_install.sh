@@ -30,7 +30,7 @@ result $? "update, install new packages"
 
 result() {
     if [ $1 -eq 0 ]; then
-       # echo "result saved to $2 files in $WORK_DIR"
+        echo "ok $2"
     else
         echo "error in staring $2"
         exit 1
