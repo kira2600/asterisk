@@ -264,6 +264,14 @@ install_freepbx(){
    send \"\r\"
    expect \"Enter the path to use for your AMP web root:\"
    send \"\r\"
+   expect \"Enter the IP ADDRESS or hostname used to access the AMP web-admin:\"
+   send \"\r\"
+   expect \"Use simple Extensions [extensions] admin or separate Devices and Users [deviceanduser]?\"
+   send \"\r\"
+   expect \"Enter directory in which to store AMP executable scripts:\"
+   send \"\r\"
+   expect \"Enter directory in which to store super-user scripts:\"
+   send \"\r\"
    expect eof
    ")
 
