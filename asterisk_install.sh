@@ -221,9 +221,9 @@ apache_tune(){
 #
 mariaDB_add_bases(){
 
-   mysqladmin -u root -p $MYSQL_ROOT_PASSWORD create asterisk
-   mysqladmin -u root -p $MYSQL_ROOT_PASSWORD create asteriskcdrdb
-   cd /usr/src/freepbx && mysql -u root -p $MYSQL_ROOT_PASSWORD asterisk < SQL/newinstall.sql && mysql -u root -p $MYSQL_ROOT_PASSWORD asteriskcdrdb < SQL/cdr_mysql_table.sql && mysql -u root -p $MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON asterisk.* TO asteriskuser@localhost IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" && mysql -u root -p $MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" && mysql -u root -p $MYSQL_ROOT_PASSWORD -e "flush privileges;"
+   mysqladmin -u root -p$MYSQL_ROOT_PASSWORD create asterisk
+   mysqladmin -u root -p$MYSQL_ROOT_PASSWORD create asteriskcdrdb
+   cd /usr/src/freepbx && mysql -u root -p$MYSQL_ROOT_PASSWORD asterisk < SQL/newinstall.sql && mysql -u root -p$MYSQL_ROOT_PASSWORD asteriskcdrdb < SQL/cdr_mysql_table.sql && mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON asterisk.* TO asteriskuser@localhost IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" && mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" && mysql -u root -p$MYSQL_ROOT_PASSWORD -e "flush privileges;"
 
 }
 
