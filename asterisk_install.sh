@@ -88,6 +88,13 @@ ntp_configure(){
    sed -i s/"interface listen.*"/"interface listen $HOST_IP"/g $SCRIPT_CONF_FILES/ntp.conf
    mv /etc/ntp.conf /etc/ntp.conf_orig
    cp $SCRIPT_CONF_FILES/ntp.conf /etc/
+
+   #disable ipV6 and chrony
+   echo "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1" >>  /etc/sysctl.conf
+   systemctl stop chronyd
+   systemctl disable chronyd
+
    systemctl enable ntpd
    systemctl start ntpd
    result $? "ntpd"
