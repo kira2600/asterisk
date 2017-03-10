@@ -69,6 +69,19 @@ download_apps(){
 
 }
 
+disable_servicies(){
+
+#disable firewall
+   systemctl mask firewalld && systemctl stop firewalld
+
+#disable ipV6 and chrony
+   echo "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1" >>  /etc/sysctl.conf
+   systemctl stop chronyd
+   systemctl disable chronyd
+
+}
+
 # Configure DNS
 bind_configure(){
 
@@ -88,12 +101,6 @@ ntp_configure(){
    sed -i s/"interface listen.*"/"interface listen $HOST_IP"/g $SCRIPT_CONF_FILES/ntp.conf
    mv /etc/ntp.conf /etc/ntp.conf_orig
    cp $SCRIPT_CONF_FILES/ntp.conf /etc/
-
-   #disable ipV6 and chrony
-   echo "net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1" >>  /etc/sysctl.conf
-   systemctl stop chronyd
-   systemctl disable chronyd
 
    systemctl enable ntpd
    systemctl start ntpd
@@ -234,6 +241,40 @@ mariaDB_add_bases(){
 
 }
 
+
+#
+install_freepbx(){
+
+   /usr/src/freepbx/start_asterisk start
+   rm -rf /var/www/html/
+   cd /usr/src/freepbx/ && ./install_amp --installdb --username=asteriskuser --password=$MYSQL_ROOT_PASSWORD
+
+   FREEPBX_PARAMS=$(expect -c "
+   set timeout 10
+   spawn ./install_amp --installdb --username=asteriskuser --password=$MYSQL_ROOT_PASSWORD
+   expect \"Enter your USERNAME to connect to the 'asterisk' database:\"
+   send \"\r\"
+   expect \"Enter your PASSWORD to connect to the 'asterisk' database:\"
+   send \"\r\"
+   expect \"Enter the hostname of the 'asterisk' database:\"
+   send \"\r\"
+   expect \"Enter a USERNAME to connect to the Asterisk Manager interface:\"
+   send \"\r\"
+   expect \"Enter a PASSWORD to connect to the Asterisk Manager interface:\"
+   send \"\r\"
+   expect \"Enter the path to use for your AMP web root:\"
+   send \"\r\"
+   expect eof
+   ")
+
+   echo "$FREEPBX_PARAMS"
+
+   amportal a ma reload && amportal a ma refreshsignatures && amportal chown
+   ln -s /var/lib/asterisk/moh /var/lib/asterisk/mohmp3
+   amportal restart
+
+}
+
 # Lock file
 if [ -f "$LOCK_FILE" ]; then
     echo "Script is already running"
@@ -247,11 +288,10 @@ touch $LOCK_FILE
 
 main(){
 
-   syst_update_install; download_apps; bind_configure; ntp_configure; mariaDB_configure; pearDB_install; libsrtp_install
-   pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install; asterisk_13_install
-   apache_tune; mariaDB_add_bases
+   syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
+   libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
+   asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx
 
-   /usr/src/freepbx/start_asterisk start
 
    exit 0
 
