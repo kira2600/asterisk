@@ -21,22 +21,53 @@ if [ $# == 0 ] ; then
 fi
 
 
-# Update and install packages
-syst_update_install() {
-   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libxml2-devel libtiff-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect
-
-result $? "update, install new packages"
-}
-
 result() {
     if [ $1 -eq 0 ]; then
-        echo "ok $2"
+        echo "OK $2"
     else
         echo "error in staring $2"
         exit 1
     fi
 }
 
+
+# Update and install packages
+syst_update_install() {
+   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libxml2-devel libtiff-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect
+
+result $? "update, install new packages"
+
+}
+
+
+download_apps(){
+
+   cd /usr/src/
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz
+
+  wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz
+
+   git clone git://github.com/cisco/libsrtp libsrtp
+
+   git clone git://github.com/asterisk/pjproject pjproject
+
+   tar zxvf linuxwords.1.tar.gz; tar zvxf jansson-2.9.tar.gz; tar zxvf lame-3.99.5.tar.gz
+   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
+   tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz
+
+}
 
 # Configure DNS
 bind_configure(){
@@ -112,7 +143,7 @@ pearDB_install(){
 #
 libsrtp_install(){
 
-   cd /usr/src/ && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && tar zxvf linuxwords.1.tar.gz && rm -rf linuxwords.1.tar.gz && mv linuxwords.1/linux.words  /usr/share/dict/words && git clone git://github.com/cisco/libsrtp libsrtp && cd /usr/src/libsrtp &&  autoreconf -f -i && ./configure CFLAGS=-fPIC --prefix=/usr && make && make runtest && make install
+   cd /usr/src/ && rm -rf linuxwords.1.tar.gz && mv linuxwords.1/linux.words  /usr/share/dict/words && cd /usr/src/libsrtp &&  autoreconf -f -i && ./configure CFLAGS=-fPIC --prefix=/usr && make && make runtest && make install
    result $? "libsrtp"
 
 }
@@ -121,7 +152,7 @@ libsrtp_install(){
 #
 pjproject_install(){
 
-   cd /usr/src && git clone git://github.com/asterisk/pjproject pjproject && cd /usr/src/pjproject/ && ./configure --libdir=/usr/lib64 --prefix=/usr --enable-shared --disable-sound --disable-resample && make dep && make && make install && ldconfig
+   cd /usr/src/pjproject/ && ./configure --libdir=/usr/lib64 --prefix=/usr --enable-shared --disable-sound --disable-resample && make dep && make && make install && ldconfig
    result $? "pjproject"
 
 }
@@ -130,7 +161,7 @@ pjproject_install(){
 #
 jasson_install(){
 
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz && tar zvxf jansson-2.9.tar.gz && cd /usr/src/jansson-2.9 && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
+   cd /usr/src/jansson-2.9 && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
    result $? "jasson"
 
 }
@@ -138,7 +169,7 @@ jasson_install(){
 #
 Lame_mp3_install(){
 
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz && tar zxvf lame-3.99.5.tar.gz && cd /usr/src/lame-3.99.5 && ./configure && make && make install
+   cd /usr/src/lame-3.99.5 && ./configure && make && make install
    result $? "Lame mp3"
 
 }
@@ -147,7 +178,7 @@ Lame_mp3_install(){
 #
 DAHDI_install(){
 
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && tar xvfz dahdi-linux-complete-current.tar.gz && cd /usr/src/dahdi-linux-complete-* && make all && make install && make config
+   cd /usr/src/dahdi-linux-complete-* && make all && make install && make config
    result $? "DAHDI"
 
 }
@@ -156,7 +187,7 @@ DAHDI_install(){
 #
 LibPRI_install(){
 
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && tar xvfz libpri-current.tar.gz && cd /usr/src/libpri-1.* && make && make install
+   cd /usr/src/libpri-1.* && make && make install
    result $? "LibPRI"
 
 }
@@ -165,7 +196,7 @@ LibPRI_install(){
 #
 spandsp_install(){
 
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && tar zxvf spandsp-0.0.6.tar.gz && cd /usr/src/spandsp-0.0.6 && ./configure && make && make install && ln -s /usr/local/lib/libspandsp.so.2 /usr/lib64/libspandsp.so.2
+   cd /usr/src/spandsp-0.0.6 && ./configure && make && make install && ln -s /usr/local/lib/libspandsp.so.2 /usr/lib64/libspandsp.so.2
    result $? "Spandsp"
 
 }
@@ -174,16 +205,7 @@ spandsp_install(){
 #
 asterisk_13_install(){
 
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && tar xvfz asterisk-13-current.tar.gz && cd /usr/src/asterisk-13.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
-
-}
-
-
-#
-download_freepbx12(){
-
-   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz && tar zxvf freepbx-*.tgz &&
-   result $? "download freepbx12"
+   cd /usr/src/asterisk-13.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
 
 }
 
@@ -218,9 +240,9 @@ touch $LOCK_FILE
 
 main(){
 
-   syst_update_install; bind_configure; ntp_configure; mariaDB_configure; pearDB_install; libsrtp_install
+   syst_update_install; download_apps; bind_configure; ntp_configure; mariaDB_configure; pearDB_install; libsrtp_install
    pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install; asterisk_13_install
-   download_freepbx12i; apache_tune; mariaDB_add_bases
+   apache_tune; mariaDB_add_bases
 
    /usr/src/freepbx/start_asterisk start
 
