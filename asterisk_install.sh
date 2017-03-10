@@ -55,7 +55,8 @@ ntp_configure(){
 
    sed -i s/"SYNC_HWCLOCK=.*"/"SYNC_HWCLOCK=yes"/g /etc/sysconfig/ntpdate
    sed -i s/"interface listen.*"/"interface listen $HOST_IP"/g $SCRIPT_CONF_FILES/ntp.conf
-   \\cp $SCRIPT_CONF_FILES/ntp.conf /etc/ntp.conf
+   mv /etc/ntp.conf /etc/ntp.conf_orig
+   cp $SCRIPT_CONF_FILES/ntp.conf /etc/
    systemctl enable ntpd
    systemctl start ntpd
    result $? "ntpd"
@@ -111,7 +112,7 @@ pearDB_install(){
 #
 libsrtp_install(){
 
-   cd /usr/src/ && wget http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && tar zxvf linuxwords.1.tar.gz && rm -rf linuxwords.1.tar.gz && mv linuxwords.1/linux.words  /usr/share/dict/words && git clone git://github.com/cisco/libsrtp libsrtp && cd /usr/src/libsrtp &&  autoreconf -f -i && ./configure CFLAGS=-fPIC --prefix=/usr && make && make runtest && make install
+   cd /usr/src/ && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && tar zxvf linuxwords.1.tar.gz && rm -rf linuxwords.1.tar.gz && mv linuxwords.1/linux.words  /usr/share/dict/words && git clone git://github.com/cisco/libsrtp libsrtp && cd /usr/src/libsrtp &&  autoreconf -f -i && ./configure CFLAGS=-fPIC --prefix=/usr && make && make runtest && make install
    result $? "libsrtp"
 
 }
@@ -129,7 +130,7 @@ pjproject_install(){
 #
 jasson_install(){
 
-   cd /usr/src && wget http://www.digip.org/jansson/releases/jansson-2.9.tar.gz && tar zvxf jansson-2.9.tar.gz && cd /usr/src/jansson-2.9 && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz && tar zvxf jansson-2.9.tar.gz && cd /usr/src/jansson-2.9 && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
    result $? "jasson"
 
 }
@@ -137,7 +138,7 @@ jasson_install(){
 #
 Lame_mp3_install(){
 
-   cd /usr/src &&  wget http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz && tar zxvf lame-3.99.5.tar.gz && cd /usr/src/lame-3.99.5 && ./configure && make && make install
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz && tar zxvf lame-3.99.5.tar.gz && cd /usr/src/lame-3.99.5 && ./configure && make && make install
    result $? "Lame mp3"
 
 }
@@ -146,7 +147,7 @@ Lame_mp3_install(){
 #
 DAHDI_install(){
 
-   cd /usr/src && wget http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && tar xvfz dahdi-linux-complete-current.tar.gz && cd /usr/src/dahdi-linux-complete-* && make all && make install && make config
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && tar xvfz dahdi-linux-complete-current.tar.gz && cd /usr/src/dahdi-linux-complete-* && make all && make install && make config
    result $? "DAHDI"
 
 }
@@ -155,7 +156,7 @@ DAHDI_install(){
 #
 LibPRI_install(){
 
-   cd /usr/src && wget http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && tar xvfz libpri-current.tar.gz && cd /usr/src/libpri-1.* && make && make install
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && tar xvfz libpri-current.tar.gz && cd /usr/src/libpri-1.* && make && make install
    result $? "LibPRI"
 
 }
@@ -164,7 +165,7 @@ LibPRI_install(){
 #
 spandsp_install(){
 
-   cd /usr/src && wget http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && tar zxvf spandsp-0.0.6.tar.gz && cd /usr/src/spandsp-0.0.6 && ./configure && make && make install && ln -s /usr/local/lib/libspandsp.so.2 /usr/lib64/libspandsp.so.2
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && tar zxvf spandsp-0.0.6.tar.gz && cd /usr/src/spandsp-0.0.6 && ./configure && make && make install && ln -s /usr/local/lib/libspandsp.so.2 /usr/lib64/libspandsp.so.2
    result $? "Spandsp"
 
 }
@@ -173,7 +174,7 @@ spandsp_install(){
 #
 asterisk_13_install(){
 
-   cd /usr/src && wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && tar xvfz asterisk-13-current.tar.gz && cd /usr/src/asterisk-13.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && tar xvfz asterisk-13-current.tar.gz && cd /usr/src/asterisk-13.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
 
 }
 
@@ -181,7 +182,7 @@ asterisk_13_install(){
 #
 download_freepbx12(){
 
-   cd /usr/src && wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz && tar zxvf freepbx-*.tgz &&
+   cd /usr/src && wget --tries=4 --retry-connrefused --timeout=2 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz && tar zxvf freepbx-*.tgz &&
    result $? "download freepbx12"
 
 }
