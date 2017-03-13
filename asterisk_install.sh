@@ -11,6 +11,7 @@ HOST_IP="$(hostname -I)"
 SCRIPT_PATH="/root/asterisk"
 SCRIPT_CONF_FILES="$SCRIPT_PATH/conf_files"
 MYSQL_ROOT_PASSWORD=$1
+#GIT_REPO="https://github.com/kira2600/asterisk/archive/master.tar.gz"
 
 
 # Check arguments
@@ -59,13 +60,15 @@ download_apps(){
 
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz
 
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://storage.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
+
    git clone git://github.com/cisco/libsrtp libsrtp
 
    git clone git://github.com/asterisk/pjproject pjproject
 
    tar zxvf linuxwords.1.tar.gz; tar zvxf jansson-2.9.tar.gz; tar zxvf lame-3.99.5.tar.gz
    tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
-   tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz
+   tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz; tar -zxvf AsternicCallCenterStats.tar.gz
 
 }
 
@@ -247,12 +250,12 @@ install_freepbx(){
 
    /usr/src/freepbx/start_asterisk start
    rm -rf /var/www/html/
-   cd /usr/src/freepbx/ && ./install_amp --installdb --username=asteriskuser --password=$MYSQL_ROOT_PASSWORD
+   cd /usr/src/freepbx/ 
 
    FREEPBX_PARAMS=$(expect -c "
    set timeout 10
    spawn ./install_amp --installdb --username=asteriskuser --password=$MYSQL_ROOT_PASSWORD
-   expect \"Enter your USERNAME to connect to the 'asterisk' database:\"
+   expect \"Enter your USERNAME to connect to the 'asterisk' database:\n\"
    send \"\r\"
    expect \"Enter your PASSWORD to connect to the 'asterisk' database:\"
    send \"\r\"
@@ -266,7 +269,7 @@ install_freepbx(){
    send \"\r\"
    expect \"Enter the IP ADDRESS or hostname used to access the AMP web-admin:\"
    send \"\r\"
-   expect \"Use simple Extensions [extensions] admin or separate Devices and Users [deviceanduser]?\"
+   expect \"Use simple Extensions \[extensions\] admin or separate Devices and Users \[deviceanduser\]?\"
    send \"\r\"
    expect \"Enter directory in which to store AMP executable scripts:\"
    send \"\r\"
@@ -283,6 +286,48 @@ install_freepbx(){
 
 }
 
+
+#
+log_rotation(){
+
+   echo "/var/log/asterisk/*log {
+   missingok
+   rotate 12
+   weekly
+   create 0640 asterisk asterisk
+   postrotate
+      /usr/sbin/asterisk -rx 'logger reload' > /dev/null 2> /dev/null
+   endscript	
+   su asterisk asterisk
+}
+
+/var/log/asterisk/full {
+   missingok
+   rotate 7
+   daily
+   create 0640 asterisk asterisk
+   postrotate
+      /usr/sbin/asterisk -rx 'logger reload' > /dev/null 2> /dev/null
+   endscript
+   su asterisk asterisk
+}" > /etc/logrotate.d/asterisk
+
+   echo "0 1 * * * /usr/sbin/logrotate -s /var/log/logrotate.state /etc/logrotate.conf" >> /var/spool/cron/root
+
+}
+
+
+#
+install_asternik(){
+
+   cd /usr/src/AsternicCallCenterStats && mysql -u root -p$MYSQL_ROOT_PASSWORD  < sql/qstats.sql 
+   sed -i s/"\$dbpass =.*"/"\$dbpass = '$MYSQL_ROOT_PASSWORD';"/g /usr/src/AsternicCallCenterStats/stat/config.php
+   sed -i s/"\$manager_secret =.*"/"\$manager_secret = '$MYSQL_ROOT_PASSWORD';"/g /usr/src/AsternicCallCenterStats/stat/config.php
+   sed -i s/"\$dbpass =.*"/"\$dbpass = '$MYSQL_ROOT_PASSWORD';"/g /usr/src/AsternicCallCenterStats/parselog/config.php
+   cp -R /usr/src/AsternicCallCenterStats/stat /var/www/html/stat && cp -R /usr/src/AsternicCallCenterStats/parselog /usr/local && chown -R asterisk.asterisk /var/www/html/stat && chown -R asterisk.asterisk /usr/local/parselog  && echo "0 * * * * php -q /usr/local/parselog/parselog.php convertlocal" >> /var/spool/cron/root
+
+}
+
 # Lock file
 if [ -f "$LOCK_FILE" ]; then
     echo "Script is already running"
@@ -296,11 +341,15 @@ touch $LOCK_FILE
 
 main(){
 
+#   curl -SL $GIT_REPO | tar -xz
+#   result $? "cloning repo from git"
+
    syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
    libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
-   asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx
+   asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx; log_rotation; install_asternik
 
-
+   service network restart
+ 
    exit 0
 
 }
