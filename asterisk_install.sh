@@ -255,7 +255,7 @@ install_freepbx(){
    cd /usr/src/freepbx/ 
 
    FREEPBX_PARAMS=$(expect -c "
-   set timeout 10
+   set timeout 1
    spawn ./install_amp --installdb --username=asteriskuser --password=$MYSQL_ROOT_PASSWORD
    expect \"Enter your USERNAME to connect to the 'asterisk' database:\n\"
    send \"\r\"
@@ -271,12 +271,13 @@ install_freepbx(){
    send \"\r\"
    expect \"Enter the IP ADDRESS or hostname used to access the AMP web-admin:\"
    send \"\r\"
-   expect \"Use simple Extensions \[extensions\] admin or separate Devices and Users \[deviceanduser\]?\"
+   expect \"Use simple Extensions \[extensions\] admin or separate Devices and Users \[deviceanduser\]\?\"
    send \"\r\"
    expect \"Enter directory in which to store AMP executable scripts:\"
    send \"\r\"
    expect \"Enter directory in which to store super-user scripts:\"
    send \"\r\"
+   set timeout 60
    expect eof
    ")
 
@@ -334,7 +335,7 @@ install_asternik(){
 #
 #install_fax(){
 
-}
+#}
 
 # Lock file
 if [ -f "$LOCK_FILE" ]; then
