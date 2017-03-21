@@ -345,7 +345,7 @@ install_free_pbx_modules(){
 
 set timeout 1
 
-amportal a ma reload
+amportal a ma reload && amportal a ma refreshsignatures && amportal chown
 
 }
 
