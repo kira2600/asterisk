@@ -331,6 +331,23 @@ install_asternik(){
 
 }
 
+install_free_pbx_modules(){
+
+   cd /usr/src/freepbx/
+
+   amportal a ma enablerepo extended,standard
+
+   amportal a ma download accountcodepreserve; amportal a ma download announcement; amportal a ma download areminder; amportal a ma download arimanager; amportal a ma download asteriskinfo; amportal a ma download backup; amportal a ma download blacklist; amportal a ma download bulkdids; amportal a ma download bulkextensions; amportal a ma download callback; amportal a ma download callforward; amportal a ma download callrecording; amportal a ma download callwaiting; amportal a ma download campon; amportal a ma download cdr; amportal a ma download certman; amportal a ma download cidlookup; amportal a ma download conferences; amportal a ma download conferencespro; amportal a ma download contactmanager; amportal a ma download core; amportal a ma download customappsreg; amportal a ma download dashboard; amportal a ma download daynight; amportal a ma download dictate; amportal a ma download directory; amportal a ma download disa; amportal a ma download donotdisturb; amportal a ma download endpoint; amportal a ma download extensionroutes; amportal a ma download fax; amportal a ma download featurecodeadmin; amportal a ma download findmefollow; amportal a ma download framework; amportal a ma download freepbx_ha; amportal a ma download fw_langpacks; amportal a ma download hotelwakeup; amportal a ma download infoservices; amportal a ma download ivr; amportal a ma download languages; amportal a ma download logfiles; amportal a ma download manager; amportal a ma download miscapps; amportal a ma download miscdests; amportal a ma download music; amportal a ma download outroutemsg; amportal a ma download paging; amportal a ma download parking; amportal a ma download pbdirectory; amportal a ma download phonebook; amportal a ma download pinsets; amportal a ma download presencestate; amportal a ma download queueprio; amportal a ma download queues; amportal a ma download recordings; amportal a ma download restapi; amportal a ma download restapps; amportal a ma download restart; amportal a ma download ringgroups; amportal a ma download setcid; amportal a ma download sipsettings; amportal a ma download speeddial; amportal a ma download sysadmin; amportal a ma download timeconditions; amportal a ma download ucp; amportal a ma download userman; amportal a ma download vmblast; amportal a ma download vmnotify; amportal a ma download voicemail; amportal a ma download voicemail_report 
+
+   set timeout 1
+
+   mportal a ma install accountcodepreserve; amportal a ma install announcement; amportal a ma install areminder; amportal a ma install arimanager; amportal a ma install asteriskinfo; amportal a ma install backup; amportal a ma install blacklist; amportal a ma install bulkdids; amportal a ma install bulkextensions; amportal a ma install callback; amportal a ma install callforward; amportal a ma install callrecording; amportal a ma install callwaiting; amportal a ma install campon; amportal a ma install cdr; amportal a ma install certman; amportal a ma install cidlookup; amportal a ma install conferences; amportal a ma install conferencespro; amportal a ma install contactmanager; amportal a ma install core; amportal a ma install customappsreg; amportal a ma install dashboard; amportal a ma install daynight; amportal a ma install dictate; amportal a ma install directory; amportal a ma install disa; amportal a ma install donotdisturb; amportal a ma install endpoint; amportal a ma install extensionroutes; amportal a ma install fax; amportal a ma install featurecodeadmin; amportal a ma install findmefollow; amportal a ma install framework; amportal a ma install freepbx_ha; amportal a ma install fw_langpacks; amportal a ma install hotelwakeup; amportal a ma install infoservices; amportal a ma install ivr; amportal a ma install languages; amportal a ma install logfiles; amportal a ma install manager; amportal a ma install miscapps; amportal a ma install miscdests; amportal a ma install music; amportal a ma install outroutemsg; amportal a ma install paging; amportal a ma install parking; amportal a ma install pbdirectory; amportal a ma install phonebook; amportal a ma install pinsets; amportal a ma install presencestate; amportal a ma install queueprio; amportal a ma install queues; amportal a ma install recordings; amportal a ma install restapi; amportal a ma install restapps; amportal a ma install restart; amportal a ma install ringgroups; amportal a ma install setcid; amportal a ma install sipsettings; amportal a ma install speeddial; amportal a ma install sysadmin; amportal a ma install timeconditions; amportal a ma install ucp; amportal a ma install userman; amportal a ma install vmblast; amportal a ma install vmnotify; amportal a ma install voicemail
+
+set timeout 1
+
+amportal a ma reload
+
+}
 
 #
 #install_fax(){
@@ -356,6 +373,7 @@ main(){
    syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
    libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
    asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx; log_rotation; install_asternik
+   install_free_pbx_modules
 
    service network restart
 
