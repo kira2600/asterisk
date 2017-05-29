@@ -44,17 +44,19 @@ result $? "update, install new packages"
 download_apps(){
 
    cd /usr/src/
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
+#  wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz
+   
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sources.tar.gz https://storage.sysadmins.by/index.php/s/ASvBhKAd0LrkXO7/download
 
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
 
@@ -63,14 +65,14 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://storage.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://storage.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download
 
-   git clone git://github.com/cisco/libsrtp libsrtp
+#   git clone git://github.com/cisco/libsrtp libsrtp
 
-   git clone git://github.com/asterisk/pjproject pjproject
+#   git clone git://github.com/asterisk/pjproject pjproject
 
-   tar zxvf linuxwords.1.tar.gz; tar zvxf jansson-2.9.tar.gz; tar zxvf lame-3.99.5.tar.gz
-   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
+#   tar zxvf linuxwords.1.tar.gz; tar zvxf jansson-2.9.tar.gz; tar zxvf lame-3.99.5.tar.gz
+#   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
    tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz; tar -zxvf AsternicCallCenterStats.tar.gz
-   tar -zxvf el_fax.tar.gz
+   tar -zxvf el_fax.tar.gz; tar zxvf sources.tar.gz
 
 }
 
@@ -80,8 +82,8 @@ disable_servicies(){
    systemctl mask firewalld && systemctl stop firewalld
 
 #disable ipV6 and chrony
-   echo "net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1" >>  /etc/sysctl.conf
+#  echo "net.ipv6.conf.all.disable_ipv6 = 1
+#  net.ipv6.conf.default.disable_ipv6 = 1" >>  /etc/sysctl.conf
    systemctl stop chronyd
    systemctl disable chronyd
 
