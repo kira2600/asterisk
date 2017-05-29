@@ -58,10 +58,13 @@ download_apps(){
    
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sources.tar.gz https://storage.sysadmins.by/index.php/s/ASvBhKAd0LrkXO7/download
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz
 
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=asterisk-13-current.tar.gz https://storage.sysadmins.by/index.php/s/5cE3AFANQqMGxYq/download
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=freepbx-12.0-latest.tgz https://storage.sysadmins.by/index.php/s/iv44kwSGFB7goS7/download
+   
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://storage.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://storage.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download
 
