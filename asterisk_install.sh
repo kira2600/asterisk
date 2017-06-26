@@ -10,6 +10,7 @@ ETH_INTERFACE_NAME="$(ls /sys/class/net | grep e)"
 HOST_IP="$(hostname -I)"
 SCRIPT_PATH="/root/asterisk"
 SCRIPT_CONF_FILES="$SCRIPT_PATH/conf_files"
+SCRIPT_MODULES="$SCRIPT_PATH/modules"
 MYSQL_ROOT_PASSWORD=$1
 #GIT_REPO="https://github.com/kira2600/asterisk/archive/master.tar.gz"
 
@@ -52,16 +53,17 @@ download_apps(){
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sources.tar.gz https://storage.sysadmins.by/index.php/s/ASvBhKAd0LrkXO7/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=asterisk-13-current.tar.gz https://storage.sysadmins.by/index.php/s/5cE3AFANQqMGxYq/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=freepbx-12.0-latest.tgz https://storage.sysadmins.by/index.php/s/iv44kwSGFB7goS7/download
-   
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://storage.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://storage.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download
 #   git clone git://github.com/cisco/libsrtp libsrtp
 #   git clone git://github.com/asterisk/pjproject pjproject
 #   tar zxvf linuxwords.1.tar.gz; tar zvxf jansson-2.9.tar.gz; tar zxvf lame-3.99.5.tar.gz
 #   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
+
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sources.tar.gz https://storage.sysadmins.by/index.php/s/ASvBhKAd0LrkXO7/download
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=asterisk-13-current.tar.gz https://storage.sysadmins.by/index.php/s/5cE3AFANQqMGxYq/download
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=freepbx-12.0-latest.tgz https://storage.sysadmins.by/index.php/s/iv44kwSGFB7goS7/download
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://storage.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://storage.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download
+
    tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz; tar -zxvf AsternicCallCenterStats.tar.gz
    tar -zxvf el_fax.tar.gz; tar zxvf sources.tar.gz
 
@@ -316,11 +318,7 @@ log_rotation(){
 #
 install_asternik(){
 
-   cd /usr/src/AsternicCallCenterStats && mysql -u root -p$MYSQL_ROOT_PASSWORD  < sql/qstats.sql 
-   sed -i s/"\$dbpass =.*"/"\$dbpass = '$MYSQL_ROOT_PASSWORD';"/g /usr/src/AsternicCallCenterStats/stat/config.php
-   sed -i s/"\$manager_secret =.*"/"\$manager_secret = '$MYSQL_ROOT_PASSWORD';"/g /usr/src/AsternicCallCenterStats/stat/config.php
-   sed -i s/"\$dbpass =.*"/"\$dbpass = '$MYSQL_ROOT_PASSWORD';"/g /usr/src/AsternicCallCenterStats/parselog/config.php
-   cp -R /usr/src/AsternicCallCenterStats/stat /var/www/html/stat && cp -R /usr/src/AsternicCallCenterStats/parselog /usr/local && chown -R asterisk.asterisk /var/www/html/stat && chown -R asterisk.asterisk /usr/local/parselog  && echo "0 * * * * php -q /usr/local/parselog/parselog.php convertlocal" >> /var/spool/cron/root
+$SCRIPT_MODULES/asternik.sh
 
 }
 
@@ -342,38 +340,9 @@ amportal a ma reload && amportal a ma refreshsignatures && amportal chown
 
 }
 
-elfax_install{
+elfax_install(){
 
-cd /usr/src/elFAX
-chown asterisk.asterisk -R *
-chmod 755 fax.php
-cp fax.php /var/www/html/
-chmod 775 fax/fax-send.sh
-cp -R fax /var/lib/asterisk/agi-bin/
-mkdir -p /var/spool/asterisk/fax/queue
-mkdir /var/spool/asterisk/fax/tmp
-chown -R asterisk.asterisk /var/spool/asterisk/fax/
-echo "[fax-tx]
-exten => send,1,NoOP(------------------- FAX from \${CALLERID(number)} ------------------)
-exten => send,n,Set(FAXOPT(headerinfo)=header for fax)
-exten => send,n,Set(FAXOPT(localstationid)=my company)
-exten => send,n,Set(FAXOPT(maxrate)=14400)
-exten => send,n,Set(FAXOPT(minrate)=4800)
-
-exten => send,n,WaitForSilence(500,1,15)
-exten => send,n,NoOP(--- \${WAITSTATUS}  ---)
-exten => send,n,Answer()
-exten => send,n,Wait(3)
-exten => send,n,SendFAX(\${PICTURE})
-exten => send,n,NoOP(--- \${FAXSTATUS} ---\${FAXERROR} ---\${REMOTESTATIONID} ---)
-exten => send,n,Hangup()
-
-exten => h,1,NoOP(------------------- FAX to \${EXTEN} with \${FAXSTATUS} -----------------)
-;exten => h,n,GotoIf(\$[\"\${FAXSTATUS}\" = \"SUCCESS\"]?h,success:h,failed)
-;exten => h,n(failed),Hangup()
-;exten => h,n(success),system(echo \"\${FAXSTATUS} ---\${FAXERROR} ---\${REMOTESTATIONID}\" | mail -s \"FAX to \${EXTEN}\" \${EMAIL})
-exten => h,n,System(/usr/src/sendEmail-v1.56/sendEmail.pl -f from@gmail.com -t \${EMAIL} -u \"fax result\" -m \"\${FAXSTATUS} --\${FAXERROR} ---\${REMOTESTATIONID} \" -s smtp.gmail.com -o tls=yes -xu from@gmail.com -xp pass -o message-charset=UTF-8)
-exten => h,n,Hangup()" >>/etc/asterisk/extensions_custom.conf
+$SCRIPT_MODULES/elfax.sh
 
 }
 
