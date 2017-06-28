@@ -63,9 +63,10 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=freepbx-12.0-latest.tgz https://storage.sysadmins.by/index.php/s/iv44kwSGFB7goS7/download
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://storage.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://storage.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://storage.sysadmins.by/index.php/s/AMMr0KcHEERvjOi/download
 
    tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz; tar -zxvf AsternicCallCenterStats.tar.gz
-   tar -zxvf el_fax.tar.gz; tar zxvf sources.tar.gz
+   tar -zxvf el_fax.tar.gz; tar zxvf sources.tar.gz; tar -zxvf sendEmail-v1.56.tar.gz
 
 }
 
