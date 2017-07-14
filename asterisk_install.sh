@@ -332,7 +332,7 @@ log_rotation(){
 #
 install_asternik(){
 
-$SCRIPT_MODULES/asternik.sh
+$SCRIPT_MODULES/asternik.sh $MYSQL_ROOT_PASSWORD
 
 }
 
