@@ -22,6 +22,19 @@ if [ $# == 0 ] ; then
     exit 1;
 fi
 
+# Check selinux
+selinux() {
+    sestatus=$(sestatus | rev | cut -d " " -f1 | rev)
+
+    if  [ $sestatus == "disabled" ]; then
+        echo "Selinux disabled"
+    else
+        echo "Need to disable selinux"
+        exit 1 
+    echo 'ddd' 
+    fi
+}
+
 
 result() {
     if [ $1 -eq 0 ]; then
@@ -363,7 +376,7 @@ main(){
 #   curl -SL $GIT_REPO | tar -xz
 #   result $? "cloning repo from git"
 
-   syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
+   selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
    libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
    asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx; log_rotation; install_asternik
    install_free_pbx_modules; elfax_install
