@@ -360,6 +360,13 @@ $SCRIPT_MODULES/elfax.sh
 
 }
 
+encoding_fix(){
+
+mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'ALTER TABLE `devices` COLLATE='utf8_general_ci', CONVERT TO CHARSET utf8;' asterisk
+mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'ALTER TABLE `users` COLLATE='utf8_general_ci', CONVERT TO CHARSET utf8;' asterisk
+
+}
+
 # Lock file
 if [ -f "$LOCK_FILE" ]; then
     echo "Script is already running"
@@ -379,7 +386,7 @@ main(){
    selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
    libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
    asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx; log_rotation; install_asternik
-   install_free_pbx_modules; elfax_install
+   install_free_pbx_modules; elfax_install; encoding_fix
 
    service network restart
 
