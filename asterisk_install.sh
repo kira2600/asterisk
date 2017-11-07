@@ -281,7 +281,7 @@ install_freepbx14(){
 
    cd /usr/src/freepbx/ 
    ./start_asterisk start
-   ./install -n
+   ./install -n --dbpass=$MYSQL_ROOT_PASSWORD
 }
 #
 install_freepbx(){
