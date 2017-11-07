@@ -24,12 +24,13 @@ fi
 
 # Check selinux
 selinux() {
-    sestatus=$(sestatus | rev | cut -d " " -f1 | rev)
+    sestatus=$(sestatus | rev | cut -d " " -f1 | rev | head -n 1)
 
     if  [ $sestatus == "disabled" ]; then
         echo "Selinux disabled"
     else
-        echo "Need to disable selinux"
+        echo "Need to disable selinux. It will be disabled and You need to reboot the system"
+        sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
         exit 1 
     fi
 }
