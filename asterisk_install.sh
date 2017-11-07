@@ -47,7 +47,16 @@ result() {
 
 # Update and install packages
 syst_update_install() {
-   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libxml2-devel libtiff-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect ghostscript
+   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libtiff-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect ghostscript lynx tftp-server sendmail sendmail-cf newt-devel gtk2-devel cronie cronie-anacron python-devel && yum -y groupinstall core base "Development Tools"
+
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+
+yum -y remove php*
+yum -y install php56w php56w-pdo php56w-mysql php56w-mbstring php56w-pear php56w-process php56w-xml php56w-opcache php56w-ldap php56w-intl php56w-soap
+
+curl -sL https://rpm.nodesource.com/setup_8.x | bash -
+yum install -y nodejs
 
 result $? "update, install new packages"
 
@@ -57,28 +66,37 @@ result $? "update, install new packages"
 download_apps(){
 
    cd /usr/src/
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz
-#  wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
-#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-12.0-latest.tgz
-#   git clone git://github.com/cisco/libsrtp libsrtp
-#   git clone git://github.com/asterisk/pjproject pjproject
-#   tar zxvf linuxwords.1.tar.gz; tar zvxf jansson-2.9.tar.gz; tar zxvf lame-3.99.5.tar.gz
-#   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
+   wget --retry-connrefused --read-timeout=10 --timeout=10 --waitretry=2 -t 0 --continue http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && \
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-15-current.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://owncloud.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://owncloud.sysadmins.by/index.php/s/AMMr0KcHEERvjOi/download && \
+   git clone git://github.com/cisco/libsrtp libsrtp && \
+   git clone git://github.com/asterisk/pjproject pjproject && \
+   git clone https://github.com/akheron/jansson jasson
 
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sources.tar.gz https://owncloud.sysadmins.by/index.php/s/ASvBhKAd0LrkXO7/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=asterisk-13-current.tar.gz https://owncloud.sysadmins.by/index.php/s/5cE3AFANQqMGxYq/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=freepbx-12.0-latest.tgz https://owncloud.sysadmins.by/index.php/s/iv44kwSGFB7goS7/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://owncloud.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://owncloud.sysadmins.by/index.php/s/AMMr0KcHEERvjOi/download
+if [ $? != 0 ]; then
+   echo "can't download"; 
+   exit 1;
+fi
+   tar zxvf linuxwords.1.tar.gz; tar zxvf lame-3.100.tar.gz
+   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
+   tar xvfz asterisk-15-current.tar.gz; tar zxvf freepbx-14.0-latest.tgz; tar zxvf AsternicCallCenterStats.tar.gz
+   tar zxvf el_fax.tar.gz; tar zxvf sources.tar.gz; tar zxvf sendEmail-v1.56.tar.gz
 
-   tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-12.0-latest.tgz; tar -zxvf AsternicCallCenterStats.tar.gz
-   tar -zxvf el_fax.tar.gz; tar zxvf sources.tar.gz; tar -zxvf sendEmail-v1.56.tar.gz
+
+
+
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sources.tar.gz https://owncloud.sysadmins.by/index.php/s/ASvBhKAd0LrkXO7/download
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=asterisk-13-current.tar.gz https://storage.sysadmins.by/index.php/s/5cE3AFANQqMGxYq/download
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=freepbx-12.0-latest.tgz https://storage.sysadmins.by/index.php/s/iv44kwSGFB7goS7/download
+
 
 }
 
@@ -163,7 +181,8 @@ mariaDB_secure_installation(){
 #
 pearDB_install(){
 
-   pear uninstall db && pear install db-1.7.14
+   #pear uninstall db && 
+   pear install Console_Getopt #pear install db-1.7.14
    result $? "pearDB"
 }
 
@@ -188,7 +207,7 @@ pjproject_install(){
 #
 jasson_install(){
 
-   cd /usr/src/jansson-2.9 && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
+   cd /usr/src/jansson && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
    result $? "jasson"
 
 }
@@ -196,7 +215,7 @@ jasson_install(){
 #
 Lame_mp3_install(){
 
-   cd /usr/src/lame-3.99.5 && ./configure && make && make install
+   cd /usr/src/lame* && ./configure && make && make install
    result $? "Lame mp3"
 
 }
@@ -230,9 +249,9 @@ spandsp_install(){
 
 
 #
-asterisk_13_install(){
+asterisk_15_install(){
 
-   cd /usr/src/asterisk-13.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
+   cd /usr/src/asterisk-15.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
 
 }
 
@@ -255,6 +274,14 @@ mariaDB_add_bases(){
 }
 
 
+#
+install_freepbx14(){
+
+
+   cd /usr/src/freepbx/ 
+   ./start_asterisk start
+   ./install -n
+}
 #
 install_freepbx(){
 
@@ -331,7 +358,7 @@ log_rotation(){
 #
 install_asternik(){
 
-$SCRIPT_MODULES/asternik.sh $MYSQL_ROOT_PASSWORD
+   $SCRIPT_MODULES/asternik.sh $MYSQL_ROOT_PASSWORD
 
 }
 
@@ -347,22 +374,45 @@ install_free_pbx_modules(){
 
    mportal a ma install accountcodepreserve; amportal a ma install announcement; amportal a ma install areminder; amportal a ma install arimanager; amportal a ma install asteriskinfo; amportal a ma install backup; amportal a ma install blacklist; amportal a ma install bulkdids; amportal a ma install bulkextensions; amportal a ma install callback; amportal a ma install callforward; amportal a ma install callrecording; amportal a ma install callwaiting; amportal a ma install campon; amportal a ma install cdr; amportal a ma install certman; amportal a ma install cidlookup; amportal a ma install conferences; amportal a ma install conferencespro; amportal a ma install contactmanager; amportal a ma install core; amportal a ma install customappsreg; amportal a ma install dashboard; amportal a ma install daynight; amportal a ma install dictate; amportal a ma install directory; amportal a ma install disa; amportal a ma install donotdisturb; amportal a ma install endpoint; amportal a ma install extensionroutes; amportal a ma install fax; amportal a ma install featurecodeadmin; amportal a ma install findmefollow; amportal a ma install framework; amportal a ma install freepbx_ha; amportal a ma install fw_langpacks; amportal a ma install hotelwakeup; amportal a ma install infoservices; amportal a ma install ivr; amportal a ma install languages; amportal a ma install logfiles; amportal a ma install manager; amportal a ma install miscapps; amportal a ma install miscdests; amportal a ma install music; amportal a ma install outroutemsg; amportal a ma install paging; amportal a ma install parking; amportal a ma install pbdirectory; amportal a ma install phonebook; amportal a ma install pinsets; amportal a ma install presencestate; amportal a ma install queueprio; amportal a ma install queues; amportal a ma install recordings; amportal a ma install restapi; amportal a ma install restapps; amportal a ma install restart; amportal a ma install ringgroups; amportal a ma install setcid; amportal a ma install sipsettings; amportal a ma install speeddial; amportal a ma install sysadmin; amportal a ma install timeconditions; amportal a ma install ucp; amportal a ma install userman; amportal a ma install vmblast; amportal a ma install vmnotify; amportal a ma install voicemail
 
-set timeout 1
+   set timeout 1
 
-amportal a ma reload && amportal a ma refreshsignatures && amportal chown
+   amportal a ma reload && amportal a ma refreshsignatures && amportal chown
 
 }
 
 elfax_install(){
 
-$SCRIPT_MODULES/elfax.sh
+   $SCRIPT_MODULES/elfax.sh
 
 }
 
 encoding_fix(){
 
-mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'ALTER TABLE `devices` COLLATE='utf8_general_ci', CONVERT TO CHARSET utf8;' asterisk
-mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'ALTER TABLE `users` COLLATE='utf8_general_ci', CONVERT TO CHARSET utf8;' asterisk
+   mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'ALTER TABLE `devices` COLLATE='utf8_general_ci', CONVERT TO CHARSET utf8;' asterisk
+   mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'ALTER TABLE `users` COLLATE='utf8_general_ci', CONVERT TO CHARSET utf8;' asterisk
+
+}
+
+startup_freepbx(){
+
+   echo "[Unit]
+Description=FreePBX VoIP Server
+After=mariadb.service
+ 
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/fwconsole start -q
+ExecStop=/usr/sbin/fwconsole stop -q
+ 
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/freepbx.service
+
+   ln -s '/etc/systemd/system/freepbx.service' '/etc/systemd/system/multi-user.target.wants/freepbx.service'
+
+   systemctl start freepbx
+   
+   result $? "startup freepbx"
 
 }
 
@@ -382,10 +432,13 @@ main(){
 #   curl -SL $GIT_REPO | tar -xz
 #   result $? "cloning repo from git"
 
-   selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; pearDB_install
-   libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
-   asterisk_13_install; apache_tune; mariaDB_add_bases; install_freepbx; log_rotation; install_asternik
-   install_free_pbx_modules; elfax_install; encoding_fix
+   selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; 
+   pearDB_install;  libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
+   asterisk_15_install; apache_tune; install_freepbx14; startup_freepbx
+   log_rotation; install_asternik; elfax_install
+#mariaDB_add_bases; 
+#install_freepbx; encoding_fix
+#   install_free_pbx_modules; 
 
    service network restart
 
