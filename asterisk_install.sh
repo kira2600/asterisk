@@ -80,7 +80,7 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://owncloud.sysadmins.by/index.php/s/AMMr0KcHEERvjOi/download && \
    git clone git://github.com/cisco/libsrtp libsrtp && \
    git clone git://github.com/asterisk/pjproject pjproject && \
-   git clone https://github.com/akheron/jansson jasson
+   git clone https://github.com/akheron/jansson jansson
 
 if [ $? != 0 ]; then
    echo "can't download"; 
@@ -206,10 +206,10 @@ pjproject_install(){
 
 
 #
-jasson_install(){
+jansson_install(){
 
-   cd /usr/src/jansson && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
-   result $? "jasson"
+   cd /usr/src/jansson && autoreconf -i && ./configure --prefix=/usr/ && make clean && make && make install && ldconfig
+   result $? "jansson"
 
 }
 
@@ -434,7 +434,7 @@ main(){
 #   result $? "cloning repo from git"
 
    selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; 
-   pearDB_install;  libsrtp_install; pjproject_install; jasson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
+   pearDB_install;  libsrtp_install; pjproject_install; jansson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
    asterisk_15_install; apache_tune; install_freepbx14; startup_freepbx
    log_rotation; install_asternik; elfax_install
 #mariaDB_add_bases; 
