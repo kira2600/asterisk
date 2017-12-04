@@ -77,7 +77,7 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://owncloud.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://owncloud.sysadmins.by/index.php/s/AMMr0KcHEERvjOi/download && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://owncloud.sysadmins.by/index.php/s/YoWkO7zTCoTDYHk/download && \
    git clone git://github.com/cisco/libsrtp libsrtp && \
    git clone git://github.com/asterisk/pjproject pjproject && \
    git clone https://github.com/akheron/jansson jansson
