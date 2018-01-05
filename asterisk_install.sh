@@ -440,7 +440,7 @@ main(){
    selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; 
 #  pearDB_install;
    libsrtp_install; pjproject_install; jansson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
-   asterisk_15_install; apache_tune; install_freepbx14; startup_freepbx
+   asterisk_15_install; apache_tune; install_freepbx14; startup_freepbx; install_modules
    log_rotation; install_asternik; elfax_install
 #mariaDB_add_bases; 
 #install_freepbx; encoding_fix
