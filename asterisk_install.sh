@@ -423,7 +423,14 @@ install_modules(){
 
 replace_odbc(){
    odbc_connector=$(rpm -qa | grep mysql-connector-odbc)
-   rpm -e --nodeps $odbc_connector && yum install mariadb-connector-odbc -y
+   rpm -e --nodeps $odbc_connector 
+   echo "[sng-pkgs]
+name=Sangoma-\$releasever - Sangoma Open Source Packages
+mirrorlist=http://mirrorlist.sangoma.net/?release=\$releasever&arch=\$basearch&repo=sng7&dist=\$dist
+#baseurl=http://package1.sangoma.net...
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Sangoma-7" >>/etc/yum.repos.d/sangoma.repo
+   yum install mariadb-connector-odbc -y
    cat /etc/odbcinst.ini
 
 }

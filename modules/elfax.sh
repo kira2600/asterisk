@@ -35,7 +35,7 @@ exten => h,n,System(/usr/src/sendEmail-v1.56/sendEmail.pl -f from-email@gmail.co
 exten => h,n,Hangup()" >>/etc/asterisk/extensions_custom.conf
 
 echo "[ext-queues]
-exten => h,1,ExecIf($[\"\${CDR(disposition)}\"!=\"ANSWERED\"]?System(/usr/src/sendEmail-v1.56/sendEmail.pl -f from-email@gmail.com -t to-email@gmail.com -u \"Пропущенный звонок с номера \${CALLERID(num)}\" -m \"Пропущенный звонок с номера \${CALLERID(num)}\" -s smtp.gmail.com -o tls=yes -xu from-email@gmail.com  -xp password -o message-charset=UTF-8))
+exten => h,1,ExecIf(\$[\"\${CDR(disposition)}\"!=\"ANSWERED\"]?System(/usr/src/sendEmail-v1.56/sendEmail.pl -f from-email@gmail.com -t to-email@gmail.com -u \"Пропущенный звонок с номера \${CALLERID(num)}\" -m \"Пропущенный звонок с номера \${CALLERID(num)}\" -s smtp.gmail.com -o tls=yes -xu from-email@gmail.com  -xp password -o message-charset=UTF-8))
 exten => h,n,Macro(hangupcall,)
 
 [ext-fax]
