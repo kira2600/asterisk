@@ -421,6 +421,14 @@ install_modules(){
    fwconsole ma downloadinstall blacklist backup cidlookup contactmanager phonebook restapi announcement daynight callwaiting callforward directory donotdisturb findmefollow ivr callback asteriskinfo calendar fax hotelwakeup manager miscapps miscdests paging parking queueprio queues ringgroups setcid speeddial vmblast arimanager timeconditions
 }
 
+replace_odbc(){
+   odbc_connector=$(rpm -qa | grep mysql-connector-odbc)
+   rpm -e --nodeps $odbc_connector
+   yum install mariadb-connector-odbc -y
+   cat /etc/odbcinst.ini
+
+}
+
 # Lock file
 if [ -f "$LOCK_FILE" ]; then
     echo "Script is already running"
@@ -441,7 +449,7 @@ main(){
 #  pearDB_install;
    libsrtp_install; pjproject_install; jansson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
    asterisk_15_install; apache_tune; install_freepbx14; startup_freepbx; install_modules
-   log_rotation; install_asternik; elfax_install
+   log_rotation; install_asternik; elfax_install; replace_odbc
 #mariaDB_add_bases; 
 #install_freepbx; encoding_fix
 #   install_free_pbx_modules; 
