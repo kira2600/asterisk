@@ -1,7 +1,7 @@
 #!/bin/bash
 # ------------------------------------------------------------------
 # [Andrei Kirushchanka] Title
-#          Asterisk 13 and freepbx 12 installation
+#          Asterisk 15 and freepbx 14 installation
 # ------------------------------------------------------------------
 
 SUBJECT="install_asterisk"
@@ -451,7 +451,7 @@ main(){
 #   curl -SL $GIT_REPO | tar -xz
 #   result $? "cloning repo from git"
 
-   selinux; syst_update_install; download_apps; disable_servicies; bind_configure; ntp_configure; mariaDB_configure; 
+   selinux; syst_update_install; disable_servicies; bind_configure; ntp_configure; download_apps; mariaDB_configure; 
 #  pearDB_install;
    libsrtp_install; pjproject_install; jansson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
    asterisk_15_install; apache_tune; install_freepbx14; startup_freepbx; install_modules
