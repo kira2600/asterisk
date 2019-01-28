@@ -383,7 +383,7 @@ install_free_pbx_modules(){
 
 elfax_install(){
 
-   $SCRIPT_MODULES/elfax.sh
+   $SCRIPT_MODULES/elfax.sh $SCRIPT_PATH
 
 }
 
