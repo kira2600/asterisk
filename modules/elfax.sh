@@ -4,7 +4,7 @@
 #          elfax and queue-email installation
 # ------------------------------------------------------------------
 
-CREDENTIALS="./email_credentials"
+CREDENTIALS="$1/email_credentials"
 MAIL_FROM=`sed -n '1p' < $CREDENTIALS`
 PASSWORD=`sed -n '2p' < $CREDENTIALS`
 MAIL_TO=`sed -n '3p' < $CREDENTIALS`
