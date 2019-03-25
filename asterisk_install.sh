@@ -72,7 +72,7 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://www.soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download && \
