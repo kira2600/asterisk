@@ -89,7 +89,7 @@ if [ $? != 0 ]; then
    exit 1;
 fi
    tar zxvf linuxwords.1.tar.gz; tar zxvf lame-3.100.tar.gz
-   tar xvfz dahdi-linux-complete-current.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
+   tar xvfz dahdi-linux-complete-2.11.1+2.11.1.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
    tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-14.0-latest.tgz; tar zxvf AsternicCallCenterStats.tar.gz
    tar zxvf el_fax.tar.gz; tar zxvf sources.tar.gz; tar zxvf sendEmail-v1.56.tar.gz
 
