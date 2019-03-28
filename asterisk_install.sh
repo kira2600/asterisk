@@ -67,9 +67,9 @@ result $? "update, install new packages"
 download_apps(){
 
    cd /usr/src/
-   wget --retry-connrefused --read-timeout=10 --timeout=10 --waitretry=2 -t 0 --continue http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && \
+#   wget --retry-connrefused --read-timeout=10 --timeout=10 --waitretry=2 -t 0 --continue http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && \
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz && \
+#   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://www.soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && \
@@ -77,6 +77,8 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://owncloud.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=lame-3.100.tar.gz https://owncloud.sysadmins.by/index.php/s/nxx432OY5dDRqmL/download && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=linuxwords.1.tar.gz https://owncloud.sysadmins.by/index.php/s/tC6MgqfNuCqQ0Jh/download && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=sendEmail-v1.56.tar.gz https://owncloud.sysadmins.by/index.php/s/YoWkO7zTCoTDYHk/download && \
    git clone https://github.com/cisco/libsrtp libsrtp && \
    git clone https://github.com/asterisk/pjproject pjproject && \
