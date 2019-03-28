@@ -70,7 +70,7 @@ download_apps(){
 #   wget --retry-connrefused --read-timeout=10 --timeout=10 --waitretry=2 -t 0 --continue http://sourceforge.net/projects/souptonuts/files/souptonuts/dictionary/linuxwords.1.tar.gz && \
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://www.digip.org/jansson/releases/jansson-2.9.tar.gz
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-2.11.1+2.11.1.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://www.soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && \
