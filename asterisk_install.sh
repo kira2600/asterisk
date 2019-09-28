@@ -72,9 +72,9 @@ download_apps(){
 #   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-2.11.1+2.11.1.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://www.soft-switch.org/downloads/spandsp/spandsp-0.0.6.tar.gz && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2  http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://src.fedoraproject.org/lookaside/pkgs/spandsp/spandsp-0.0.6.tar.gz/897d839516a6d4edb20397d4757a7ca3/spandsp-0.0.6.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://owncloud.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=lame-3.100.tar.gz https://owncloud.sysadmins.by/index.php/s/nxx432OY5dDRqmL/download && \
