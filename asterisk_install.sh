@@ -1,7 +1,7 @@
 #!/bin/bash
 # ------------------------------------------------------------------
 # [Andrei Kirushchanka] Title
-#          Asterisk 13 and freepbx 14 installation
+#          Asterisk 16 and freepbx 14 installation
 # ------------------------------------------------------------------
 
 SUBJECT="install_asterisk"
@@ -48,7 +48,7 @@ result() {
 
 # Update and install packages
 syst_update_install() {
-   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libtiff-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect ghostscript lynx tftp-server sendmail sendmail-cf newt-devel gtk2-devel cronie cronie-anacron python-devel && yum -y groupinstall core base "Development Tools"
+   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libtiff-devel libedit-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect ghostscript lynx tftp-server sendmail sendmail-cf newt-devel gtk2-devel cronie cronie-anacron python-devel && yum -y groupinstall core base "Development Tools"
 
 rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
@@ -73,7 +73,7 @@ download_apps(){
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-2.11.1+2.11.1.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 https://src.fedoraproject.org/lookaside/pkgs/spandsp/spandsp-0.0.6.tar.gz/897d839516a6d4edb20397d4757a7ca3/spandsp-0.0.6.tar.gz && \
-   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz && \
+   wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current.tar.gz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=AsternicCallCenterStats.tar.gz https://owncloud.sysadmins.by/index.php/s/avhTbEWz8fyp6og/download && \
    wget --tries=4 --retry-connrefused --read-timeout=5 --timeout=10 --waitretry=2 --no-check-certificate --output-document=el_fax.tar.gz https://owncloud.sysadmins.by/index.php/s/jrHKHsVmbOJw51O/download && \
@@ -90,7 +90,7 @@ if [ $? != 0 ]; then
 fi
    tar zxvf linuxwords.1.tar.gz; tar zxvf lame-3.100.tar.gz
    tar xvfz dahdi-linux-complete-2.11.1+2.11.1.tar.gz; tar xvfz libpri-current.tar.gz; tar zxvf spandsp-0.0.6.tar.gz
-   tar xvfz asterisk-13-current.tar.gz; tar zxvf freepbx-14.0-latest.tgz; tar zxvf AsternicCallCenterStats.tar.gz
+   tar xvfz asterisk-16-current.tar.gz; tar zxvf freepbx-14.0-latest.tgz; tar zxvf AsternicCallCenterStats.tar.gz
    tar zxvf el_fax.tar.gz; tar zxvf sources.tar.gz; tar zxvf sendEmail-v1.56.tar.gz
 
 
@@ -252,9 +252,9 @@ spandsp_install(){
 
 
 #
-asterisk_13_install(){
+asterisk_16_install(){
 
-   cd /usr/src/asterisk-13.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
+   cd /usr/src/asterisk-16.* && ./configure --libdir=/usr/lib64 && contrib/scripts/get_mp3_source.sh && make menuselect.makeopts && menuselect/menuselect --enable app_macro --enable-category MENUSELECT_ADDONS --enable-category MENUSELECT_AGIS --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW --enable CORE-SOUNDS-EN-ALAW --enable CORE-SOUNDS-EN-G729 --enable CORE-SOUNDS-EN-G722 --enable CORE-SOUNDS-RU-WAV --enable CORE-SOUNDS-RU-ULAW --enable CORE-SOUNDS-RU-ALAW  --enable CORE-SOUNDS-RU-GSM --enable CORE-SOUNDS-RU-G729 --enable CORE-SOUNDS-RU-G722 --enable MOH-OPSOUND-ULAW --enable MOH-OPSOUND-ALAW --enable MOH-OPSOUND-GSM --enable MOH-OPSOUND-G729 --enable MOH-OPSOUND-G722 --enable EXTRA-SOUNDS-EN-WAV --enable EXTRA-SOUNDS-EN-ULAW --enable EXTRA-SOUNDS-EN-ALAW --enable EXTRA-SOUNDS-EN-GSM --enable EXTRA-SOUNDS-EN-G729 --enable EXTRA-SOUNDS-EN-G722 menuselect.makeopts && make && make install && make config && ldconfig && sed -i 's/ASTARGS=""/ASTARGS="-U asterisk"/g'  /usr/sbin/safe_asterisk && useradd -m asterisk && chown asterisk.asterisk /var/run/asterisk && chown -R asterisk.asterisk /etc/asterisk && chown -R asterisk.asterisk /var/{lib,log,spool}/asterisk && chown -R asterisk.asterisk /usr/lib64/asterisk
 
 }
 
@@ -453,10 +453,9 @@ main(){
 #   curl -SL $GIT_REPO | tar -xz
 #   result $? "cloning repo from git"
 
-   selinux; syst_update_install; disable_servicies; bind_configure; ntp_configure; download_apps; mariaDB_configure; 
-#  pearDB_install;
+   selinux; syst_update_install; disable_servicies; bind_configure; ntp_configure; download_apps; mariaDB_configure; pearDB_install;
    libsrtp_install; pjproject_install; jansson_install; Lame_mp3_install; DAHDI_install; LibPRI_install; spandsp_install
-   asterisk_13_install; apache_tune; install_freepbx14; startup_freepbx; install_modules
+   asterisk_16_install; apache_tune; install_freepbx14; startup_freepbx; install_modules
    log_rotation; install_asternik; elfax_install; replace_odbc
 #mariaDB_add_bases; 
 #install_freepbx; encoding_fix
