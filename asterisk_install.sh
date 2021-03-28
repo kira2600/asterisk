@@ -22,8 +22,11 @@ if [ $# == 0 ] ; then
     exit 1;
 fi
 
-# Check selinux
+# Check selinux and update
 selinux() {
+
+    yum update -y
+
     sestatus=$(sestatus | rev | cut -d " " -f1 | rev | head -n 1)
 
     if  [ $sestatus == "disabled" ]; then
@@ -48,7 +51,7 @@ result() {
 
 # Update and install packages
 syst_update_install() {
-   yum update -y && yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libtiff-devel libedit-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect ghostscript lynx tftp-server sendmail sendmail-cf newt-devel gtk2-devel cronie cronie-anacron python-devel && yum -y groupinstall core base "Development Tools"
+   yum install -y epel-release &&  yum install -y sudo crontabs e2fsprogs-devel  keyutils-libs-devel krb5-devel libogg libselinux-devel libsepol-devel libtiff-devel libedit-devel gmp php-pear php php-gd php-mysql php-pdo php-mbstring ncurses-devel mysql-connector-odbc unixODBC unixODBC-devel audiofile-devel libogg-devel openssl-devel zlib-devel perl-DateManip sox git wget net-tools psmisc gcc-c++ make gnutls-devel libxml2-devel ncurses-devel subversion doxygen texinfo curl-devel net-snmp-devel neon-devel uuid-devel libuuid-devel speex-devel gsm-devel sqlite-devel sqlite libtool libtool-ltdl libtool-ltdl-devel kernel-devel kernel-headers "kernel-devel-uname-r == $(uname -r)" htop mc vim mariadb-server mariadb mariadb-devel bind bind-utils ntp iptables-services perl perl-CPAN perl-Net-SSLeay perl-IO-Socket-SSL mod_ssl expect ghostscript lynx tftp-server sendmail sendmail-cf newt-devel gtk2-devel cronie cronie-anacron python-devel && yum -y groupinstall core base "Development Tools"
 
 rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
